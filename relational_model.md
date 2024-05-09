@@ -8,20 +8,22 @@ Por otro lado, para los jugadores se registrará su nombre, apellido y la cantid
 
 #### Relaciones
 
-- Player(<u>player_id</u>, first_name, last_game, won_hands)
+- Jugadores(<u>id_jugador</u>, nombre, apellido)
 
-- Games(<u>game_id</u>, table_id, num_participants, begin_at, duration)
+- Partidos(<u>id_partido</u>, num_jugadores, hora_inicio, duracion)
 
-- Cards(<u>card_id</u>, suit, value)
+- Manos(<u>mano_en_partido, <span style='border-bottom: 1px dashed;'>id_partido</span></u>, <span style='border-bottom: 1px dashed;'>jugador_ganador</span>) -> restricción: total_bet es la suma de todas las bet de rounds
 
-- CardInHand(<u><span style='border-bottom: 1px dashed;'>game_id</span>, hand_in_game, <span style='border-bottom: 1px dashed;'>card_id</span></u>, owner, owner_id)
-  - owner es croupier o player
-  - owner_id es croupier_id o player_id
+- Cartas(<u>id_cartas</u>, palo, valor)
 
-- Round(<u>round_in_hand, <span style='border-bottom: 1px dashed;'>game_id, hand_in_game, player_id</span></u>, bet, money_available) -> Restricción: el jugador siempre está asociado al mismo orden
+- JugadorTieneEn(<u><span style='border-bottom: 1px dashed;'>id_partido, mano_en_partido, id_jugador</u>, <span style='border-bottom: 1px dashed;'>id_carta_1, id_carta_2</span>)
 
-- OrderInHand(<u><span style='border-bottom: 1px dashed;'>game_id, hand_in_game, player_id</span></u>, order)
-  
-- Hand(<u>hand_in_game, <span style='border-bottom: 1px dashed;'>game_id</span></u>, total_bet, winner_id) -> restricción: total_bet es la suma de todas las bet de rounds
+- Rondas(<u>ronda_en_mano, <span style='border-bottom: 1px dashed;'>id_partido, mano_en_partido</span></u>)
+
+- JugadoresEnRondas(<span style='border-bottom: 1px dashed;'><u>ronda_en_mano, id_partido, mano_en_partido, id_jugador</span></u>, apuesta, dinero_disponible)
+
+- CartasEnRonda(<span style='border-bottom: 1px dashed;'><u>ronda_en_mano, id_partido, mano_en_partido</span></u>, <span style='border-bottom: 1px dashed;'>id_carta</span>)
+
+- OrdenEnMano(<u><span style='border-bottom: 1px dashed;'>id_partido, mano_en_partido, id_jugador</span></u>, orden)
 
 
