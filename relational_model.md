@@ -12,7 +12,7 @@ Por otro lado, para los jugadores se registrará su nombre, apellido y la cantid
 
 - Partidos(<u>id_partido</u>, num_jugadores, hora_inicio, duracion)
 
-- Manos(<u>mano_en_partido, <span style='border-bottom: 1px dashed;'>id_partido</span></u>, <span style='border-bottom: 1px dashed;'>jugador_ganador</span>) -> restricción: total_bet es la suma de todas las bet de rounds
+- Manos(<u>mano_en_partido, <span style='border-bottom: 1px dashed;'>id_partido</span></u>, <span style='border-bottom: 1px dashed;'>jugador_ganador</span>)
 
 - Cartas(<u>id_cartas</u>, palo, valor)
 
