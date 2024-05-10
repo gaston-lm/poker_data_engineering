@@ -16,14 +16,10 @@ Por otro lado, para los jugadores se registrará su nombre, apellido y la cantid
 
 - Cartas(<u>id_cartas</u>, palo, valor)
 
-- JugadorTieneEn(<u><span style='border-bottom: 1px dashed;'>id_partido, mano_en_partido, id_jugador</u>, <span style='border-bottom: 1px dashed;'>id_carta_1, id_carta_2</span>)
+- JugadorTieneEn(<u><span style='border-bottom: 1px dashed;'>id_partido, mano_en_partido, id_jugador</u>, <span style='border-bottom: 1px dashed;'>id_carta_1, id_carta_2</span>, orden)
 
 - Rondas(<u>ronda_en_mano, <span style='border-bottom: 1px dashed;'>id_partido, mano_en_partido</span></u>)
 
 - JugadoresEnRondas(<span style='border-bottom: 1px dashed;'><u>ronda_en_mano, id_partido, mano_en_partido, id_jugador</span></u>, apuesta, dinero_disponible)
 
 - CartasEnRonda(<span style='border-bottom: 1px dashed;'><u>ronda_en_mano, id_partido, mano_en_partido</span></u>, <span style='border-bottom: 1px dashed;'>id_carta</span>)
-
-- OrdenEnMano(<u><span style='border-bottom: 1px dashed;'>id_partido, mano_en_partido, id_jugador</span></u>, orden)
-
-
