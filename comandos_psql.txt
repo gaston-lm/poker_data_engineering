@@ -1,0 +1,3 @@
+docker ps
+docker exec -it id_docker /bash
+psql postgres --username douglas_adams

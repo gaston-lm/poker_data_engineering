@@ -4,7 +4,7 @@ from faker import Faker
 from faker.providers import address, date_time, internet, passport, phone_number
 import uuid
 
-from custom_types import Records, Record
+from td7.custom_types import Records, Record
 
 CARTAS = [
     {"id_carta": 1, "palo": "diamonds", "valor": "A"},
@@ -212,7 +212,6 @@ class DataGenerator:
                 condition = False
                 if jugador == winner:
                     condition = True
-                    print("hay ganador")
 
                 jugadores_juegan_con.append(
                     {
@@ -335,8 +334,6 @@ class DataGenerator:
                 cartas_usadas[i].add(carta["id_carta"])
 
         return cartas_en_ronda
-
-    ## FALTA ESTA ULTIMA TABLA (que es un poco la más dolor de huevo)
 
     def generate_jugadores_en_ronda(self, rondas: Records, jugadores: Records) -> Records:
         """Generates jugadores_en_ronda (players in round) entries.
