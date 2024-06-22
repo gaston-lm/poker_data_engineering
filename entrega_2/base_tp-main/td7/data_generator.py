@@ -6,57 +6,6 @@ import uuid
 
 from td7.custom_types import Records, Record
 
-CARTAS = [
-    {"id_carta": 1, "palo": "diamonds", "valor": "A"},
-    {"id_carta": 2, "palo": "hearts", "valor": "A"},
-    {"id_carta": 3, "palo": "spades", "valor": "A"},
-    {"id_carta": 4, "palo": "clubs", "valor": "A"},
-    {"id_carta": 5, "palo": "diamonds", "valor": "K"},
-    {"id_carta": 6, "palo": "hearts", "valor": "K"},
-    {"id_carta": 7, "palo": "spades", "valor": "K"},
-    {"id_carta": 8, "palo": "clubs", "valor": "K"},
-    {"id_carta": 9, "palo": "diamonds", "valor": "Q"},
-    {"id_carta": 10, "palo": "hearts", "valor": "Q"},
-    {"id_carta": 11, "palo": "spades", "valor": "Q"},
-    {"id_carta": 12, "palo": "clubs", "valor": "Q"},
-    {"id_carta": 13, "palo": "diamonds", "valor": "J"},
-    {"id_carta": 14, "palo": "hearts", "valor": "J"},
-    {"id_carta": 15, "palo": "spades", "valor": "J"},
-    {"id_carta": 16, "palo": "clubs", "valor": "J"},
-    {"id_carta": 17, "palo": "diamonds", "valor": "9"},
-    {"id_carta": 18, "palo": "hearts", "valor": "9"},
-    {"id_carta": 19, "palo": "spades", "valor": "9"},
-    {"id_carta": 20, "palo": "clubs", "valor": "9"},
-    {"id_carta": 21, "palo": "diamonds", "valor": "8"},
-    {"id_carta": 22, "palo": "hearts", "valor": "8"},
-    {"id_carta": 23, "palo": "spades", "valor": "8"},
-    {"id_carta": 24, "palo": "clubs", "valor": "8"},
-    {"id_carta": 25, "palo": "diamonds", "valor": "7"},
-    {"id_carta": 26, "palo": "hearts", "valor": "7"},
-    {"id_carta": 27, "palo": "spades", "valor": "7"},
-    {"id_carta": 28, "palo": "clubs", "valor": "7"},
-    {"id_carta": 29, "palo": "diamonds", "valor": "6"},
-    {"id_carta": 30, "palo": "hearts", "valor": "6"},
-    {"id_carta": 31, "palo": "spades", "valor": "6"},
-    {"id_carta": 32, "palo": "clubs", "valor": "6"},
-    {"id_carta": 33, "palo": "diamonds", "valor": "5"},
-    {"id_carta": 34, "palo": "hearts", "valor": "5"},
-    {"id_carta": 35, "palo": "spades", "valor": "5"},
-    {"id_carta": 36, "palo": "clubs", "valor": "5"},
-    {"id_carta": 37, "palo": "diamonds", "valor": "4"},
-    {"id_carta": 38, "palo": "hearts", "valor": "4"},
-    {"id_carta": 39, "palo": "spades", "valor": "4"},
-    {"id_carta": 40, "palo": "clubs", "valor": "4"},
-    {"id_carta": 41, "palo": "diamonds", "valor": "3"},
-    {"id_carta": 42, "palo": "hearts", "valor": "3"},
-    {"id_carta": 43, "palo": "spades", "valor": "3"},
-    {"id_carta": 44, "palo": "clubs", "valor": "3"},
-    {"id_carta": 45, "palo": "diamonds", "valor": "2"},
-    {"id_carta": 46, "palo": "hearts", "valor": "2"},
-    {"id_carta": 47, "palo": "spades", "valor": "2"},
-    {"id_carta": 48, "palo": "clubs", "valor": "2"}
-]
-
 JUGADORES = [
     {"id_jugador": 1, "nombre": "Gaston", "apellido": "Loza"},
     {"id_jugador": 2, "nombre": "Valentin", "apellido": "Bonas"},
@@ -82,9 +31,60 @@ class DataGenerator:
         """Instantiates faker instance"""
         self.fake = Faker()
         self.fake.add_provider(passport)
-        # esto en realidad habría que hacer que se extraigan de la DB
-        self.cards = CARTAS 
-        self.jugadores = JUGADORES
+        self.cards = []
+
+    def generate_cards(self) -> Records:
+        cards = [
+            {"id_carta": 1, "palo": "diamonds", "valor": "A"},
+            {"id_carta": 2, "palo": "hearts", "valor": "A"},
+            {"id_carta": 3, "palo": "spades", "valor": "A"},
+            {"id_carta": 4, "palo": "clubs", "valor": "A"},
+            {"id_carta": 5, "palo": "diamonds", "valor": "K"},
+            {"id_carta": 6, "palo": "hearts", "valor": "K"},
+            {"id_carta": 7, "palo": "spades", "valor": "K"},
+            {"id_carta": 8, "palo": "clubs", "valor": "K"},
+            {"id_carta": 9, "palo": "diamonds", "valor": "Q"},
+            {"id_carta": 10, "palo": "hearts", "valor": "Q"},
+            {"id_carta": 11, "palo": "spades", "valor": "Q"},
+            {"id_carta": 12, "palo": "clubs", "valor": "Q"},
+            {"id_carta": 13, "palo": "diamonds", "valor": "J"},
+            {"id_carta": 14, "palo": "hearts", "valor": "J"},
+            {"id_carta": 15, "palo": "spades", "valor": "J"},
+            {"id_carta": 16, "palo": "clubs", "valor": "J"},
+            {"id_carta": 17, "palo": "diamonds", "valor": "9"},
+            {"id_carta": 18, "palo": "hearts", "valor": "9"},
+            {"id_carta": 19, "palo": "spades", "valor": "9"},
+            {"id_carta": 20, "palo": "clubs", "valor": "9"},
+            {"id_carta": 21, "palo": "diamonds", "valor": "8"},
+            {"id_carta": 22, "palo": "hearts", "valor": "8"},
+            {"id_carta": 23, "palo": "spades", "valor": "8"},
+            {"id_carta": 24, "palo": "clubs", "valor": "8"},
+            {"id_carta": 25, "palo": "diamonds", "valor": "7"},
+            {"id_carta": 26, "palo": "hearts", "valor": "7"},
+            {"id_carta": 27, "palo": "spades", "valor": "7"},
+            {"id_carta": 28, "palo": "clubs", "valor": "7"},
+            {"id_carta": 29, "palo": "diamonds", "valor": "6"},
+            {"id_carta": 30, "palo": "hearts", "valor": "6"},
+            {"id_carta": 31, "palo": "spades", "valor": "6"},
+            {"id_carta": 32, "palo": "clubs", "valor": "6"},
+            {"id_carta": 33, "palo": "diamonds", "valor": "5"},
+            {"id_carta": 34, "palo": "hearts", "valor": "5"},
+            {"id_carta": 35, "palo": "spades", "valor": "5"},
+            {"id_carta": 36, "palo": "clubs", "valor": "5"},
+            {"id_carta": 37, "palo": "diamonds", "valor": "4"},
+            {"id_carta": 38, "palo": "hearts", "valor": "4"},
+            {"id_carta": 39, "palo": "spades", "valor": "4"},
+            {"id_carta": 40, "palo": "clubs", "valor": "4"},
+            {"id_carta": 41, "palo": "diamonds", "valor": "3"},
+            {"id_carta": 42, "palo": "hearts", "valor": "3"},
+            {"id_carta": 43, "palo": "spades", "valor": "3"},
+            {"id_carta": 44, "palo": "clubs", "valor": "3"},
+            {"id_carta": 45, "palo": "diamonds", "valor": "2"},
+            {"id_carta": 46, "palo": "hearts", "valor": "2"},
+            {"id_carta": 47, "palo": "spades", "valor": "2"},
+            {"id_carta": 48, "palo": "clubs", "valor": "2"}
+        ]
+        return cards
 
     def generate_jugadores(self, n: int) -> Records:
         """Generates n jugadores (players).
@@ -110,7 +110,7 @@ class DataGenerator:
             )
         return jugadores
 
-    def generate_partido(self, id: int):
+    def generate_partido(self, id_prev: int, sample_jugadores: list[Records], cards: list[Records], date: datetime.datetime):
         """Generates all things necessary to keep consistency withing a partido (game)
 
         Parameters
@@ -119,10 +119,12 @@ class DataGenerator:
             Previous ID number of games.
 
         """
+        self.cards = cards
+
         partido: Record = {
-                    "id_partido": id + 1,
+                    "id_partido": id_prev + 1,
                     "num_jugadores": random.randint(2, 8),
-                    "hora_inicio": self.fake.date_time_this_year(),
+                    "hora_inicio": date,
                     "duracion": random.randint(30, 180)  # duration in minutes --> esto en la entrega 1 dijeron q estaba mal
                 }
         print("Partido: ", partido)
@@ -130,7 +132,7 @@ class DataGenerator:
         manos: Records = self.generate_manos(partido)
         print("manos: ", manos)
 
-        jugadores: Records = random.sample(self.jugadores, partido["num_jugadores"])
+        jugadores: Records = random.sample(sample_jugadores, partido["num_jugadores"])
 
         jug_con = self.generate_jugadores_juegan_con(manos, jugadores)
         jugadores_juegan_con: Records = jug_con[0]
@@ -147,6 +149,8 @@ class DataGenerator:
 
         jugadores_en_ronda = self.generate_jugadores_en_ronda(rondas, jugadores)
         print("jugadores_en_ronda: ", jugadores_en_ronda)
+
+        return [partido], manos, jugadores_juegan_con, rondas, cartas_en_ronda, jugadores_en_ronda
 
 
     def generate_manos(self, partido: Record) -> Records:
@@ -294,7 +298,7 @@ class DataGenerator:
                             "ronda_en_mano": 2,
                             "id_partido": mano["id_partido"],
                             "mano_en_partido": mano["mano_en_partido"],
-                            "id_carta": carta
+                            "id_carta": carta["id_carta"]
                         }
                     )
                     cartas_usadas[i].add(carta["id_carta"])
@@ -311,7 +315,7 @@ class DataGenerator:
                         "ronda_en_mano": 3,
                         "id_partido": mano["id_partido"],
                         "mano_en_partido": mano["mano_en_partido"],
-                        "id_carta": carta
+                        "id_carta": carta["id_carta"]
                     }
                 )
                 cartas_usadas[i].add(carta["id_carta"])
@@ -328,7 +332,7 @@ class DataGenerator:
                         "ronda_en_mano": 4,
                         "id_partido": mano["id_partido"],
                         "mano_en_partido": mano["mano_en_partido"],
-                        "id_carta": carta
+                        "id_carta": carta["id_carta"]
                     }
                 )
                 cartas_usadas[i].add(carta["id_carta"])

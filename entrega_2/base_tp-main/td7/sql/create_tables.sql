@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Jugadores (
-    id_jugador INTEGER PRIMARY KEY,
+    id_jugador TEXT PRIMARY KEY,
     nombre TEXT,
     apellido TEXT
 );
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Cartas (
 CREATE TABLE IF NOT EXISTS JugadoresJueganCon (
     id_partido INTEGER,
     mano_en_partido INTEGER,
-    id_jugador INTEGER REFERENCES Jugadores(id_jugador),
+    id_jugador TEXT REFERENCES Jugadores(id_jugador),
     id_carta_1 INTEGER REFERENCES Cartas(id_carta),
     id_carta_2 INTEGER REFERENCES Cartas(id_carta),
     orden INTEGER,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS JugadoresEnRonda(
     ronda_en_mano INTEGER,
     id_partido INTEGER,
     mano_en_partido INTEGER,
-    id_jugador INTEGER REFERENCES Jugadores(id_jugador),
+    id_jugador TEXT REFERENCES Jugadores(id_jugador),
     apuesta INTEGER,
     dinero_disponible INTEGER,
     PRIMARY KEY (ronda_en_mano, id_partido, mano_en_partido, id_jugador),
