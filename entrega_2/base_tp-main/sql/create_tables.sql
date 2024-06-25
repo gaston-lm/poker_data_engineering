@@ -66,3 +66,9 @@ CREATE TABLE IF NOT EXISTS CartasEnRonda (
     FOREIGN KEY (ronda_en_mano, id_partido, mano_en_partido) REFERENCES Rondas(ronda_en_mano, id_partido, mano_en_partido),
     CONSTRAINT unique_cartas_en_mano UNIQUE (id_partido, mano_en_partido, id_carta)
 );
+
+COPY cartas 
+FROM '/docker-entrypoint-initdb.d/cards.csv'
+DELIMITER ',' 
+CSV HEADER
+ENCODING 'LATIN1';

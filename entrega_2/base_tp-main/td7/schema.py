@@ -5,14 +5,10 @@ from td7.database import Database
 
 class Schema:
     def __init__(self):
-        self.db = Database(sql_file_path='sql/create_tables.sql')        
+        self.db = Database()        
     
-    def get_players(self, sample_n: Optional[int] = None) -> Records:
-        query = "SELECT * FROM Jugadores"
-        # if sample_n is not None:
-        #     query += f" LIMIT {sample_n}"
-        
-        return self.db.run_select(query)
+    def get_players(self) -> Records:
+        return self.db.run_select("SELECT * FROM Jugadores" )
 
     def get_games(self) -> Records:
         return self.db.run_select("SELECT * FROM Partidos")
@@ -33,8 +29,6 @@ class Schema:
                                         AND je.mano_en_partido = r.mano_en_partido
                                     JOIN LastWeekPartidos p ON je.id_partido = p.id_partido;
                                     """)
-
-        print(suma)
         return suma
         
     def get_hands(self) -> Records:

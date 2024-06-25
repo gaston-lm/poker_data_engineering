@@ -8,16 +8,6 @@ from td7.schema import Schema
 
 EVENTS_PER_DAY = 10
 
-def _generate_once():
-    generator = DataGenerator()
-    schema = Schema()
-    # Por única vez cargo en sistema las 48 cartas
-    cards = generator.generate_cards()
-    schema.insert(cards, "cartas")
-    # Por única vez cargo en sistema los primeros 30 jugadores
-    jugadores = generator.generate_jugadores(30)
-    schema.insert(jugadores, "jugadores")
-
 def _total_bets_last_week():
     schema = Schema()
     total_bet = int(schema.get_last_week_total_bet()[0]['total_apuesta'])
@@ -41,7 +31,7 @@ def _generate_data(base_time: str, n: int):
     generator = DataGenerator()
     schema = Schema()
 
-    jugadores = generator.generate_jugadores(5)
+    jugadores = generator.generate_jugadores(10)
     schema.insert(jugadores, "jugadores")
 
     num_partidos = int(schema.get_games_num()[0]['count'])
@@ -60,18 +50,7 @@ def _generate_data(base_time: str, n: int):
         schema.insert(rondas, "rondas")
         schema.insert(cartas_en_ronda, "cartasenronda")
         schema.insert(jugadores_en_ronda, "jugadoresenronda")
-        num_partidos += 1
-
-with DAG(
-    "fill_cards",
-    start_date=pendulum.datetime(2024, 6, 1, tz="UTC"),
-    schedule_interval="@once",
-    catchup=True,
-) as dag:
-    op = PythonOperator(
-        task_id="cards_players_generator",
-        python_callable=_generate_once,
-    )
+        num_partidos += 1 # --> preguntar esto
 
 with DAG(
     "fill_data",

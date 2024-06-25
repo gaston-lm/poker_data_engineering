@@ -115,7 +115,7 @@ class DataGenerator:
 
         Parameters
         ----------
-        id : int
+        id_prev : int
             Previous ID number of games.
 
         """
@@ -393,11 +393,11 @@ class DataGenerator:
         return jugadores_en_ronda
 
 # Example usage
-if __name__ == "__main__":
-    generator = DataGenerator()
+# if __name__ == "__main__":
+    # generator = DataGenerator()
 
     # Generate players
     # jugadores = generator.generate_jugadores(5)
     # print("Jugadores:", jugadores)
 
-    generator.generate_partido(0)
+    # generator.generate_partido(0)

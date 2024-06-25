@@ -37,9 +37,9 @@ docker compose up -d
 
 ## Pasos para desarrollar el TP
 
-[X] Poner los statements para crear las tablas en sql/create_tables.sql.
-[X] Modificar las funciones de obtención de datos en td7/schema.py.
-[X] Escribir los generadores de datos en td7/data_generator.py, viendo también la lógica de generación en dags/fill_data.py.
+1. Poner los statements para crear las tablas en sql/create_tables.sql.
+2. Modificar las funciones de obtención de datos en td7/schema.py.
+3. Escribir los generadores de datos en td7/data_generator.py, viendo también la lógica de generación en dags/fill_data.py.
 4. Armar el o los DAGs necesarios en dags/.
     1. Un ejemplo de un nodo para cargar datos está en dags/fill_data.py.
     2. Un ejemplo de un nodo para correr transformaciones está en dags/run_dbt.py.
