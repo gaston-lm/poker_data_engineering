@@ -33,7 +33,7 @@ DEFAULT_ARGS = {
 
 
 def copy_docs(project_dir: str):
-    # copy from project_dir/target/index.html to DBT_ROOT_PATH/target/index.htmlif it exists
+    # copy from project_dir/target/index.html to DBT_ROOT_PATH/target/index.html if it exists
     target_path = DBT_ROOT_PATH / "target"
     target_path.mkdir(exist_ok=True)
     for file in ["index.html", "manifest.json", "graph.gpickle", "catalog.json"]:

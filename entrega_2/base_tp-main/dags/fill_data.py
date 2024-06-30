@@ -59,7 +59,7 @@ with DAG(
     catchup=True,
 ) as dag:
     op = PythonOperator(
-        task_id="genrate_games",
+        task_id="generate_games",
         python_callable=_generate_data,
         op_kwargs=dict(n=EVENTS_PER_DAY, base_time="{{ ds }}"),
     )

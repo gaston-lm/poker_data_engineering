@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: poker
+    database: postgres
+    schema: public
+    tables:
+      - name: jugadores
+      - name: partidos
+      - name: manos
+      - name: cartas
+      - name: jugadoresjuegancon
+      - name: rondas
+      - name: jugadoresenronda
+      - name: cartasenronda
