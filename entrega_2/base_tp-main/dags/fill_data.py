@@ -1,21 +1,11 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy_operator import DummyOperator
 import pendulum
 import datetime
 from td7.data_generator import DataGenerator
 from td7.schema import Schema
 
 EVENTS_PER_DAY = 10
-
-def _total_bets_last_week():
-    schema = Schema()
-    total_bet = int(schema.get_last_week_total_bet()[0]['total_apuesta'])
-
-    if total_bet > 15000000:
-        return 'internal_external_report'
-    else:
-        return 'internal_report'
 
 def _generate_data(base_time: str, n: int):
     """Generates synth data and saves to DB.
@@ -55,7 +45,7 @@ def _generate_data(base_time: str, n: int):
 with DAG(
     "fill_data",
     start_date=pendulum.datetime(2024, 6, 1, tz="UTC"),
-    schedule_interval="@monthly",
+    schedule_interval="@daily",
     catchup=True,
 ) as dag:
     op = PythonOperator(
@@ -63,14 +53,3 @@ with DAG(
         python_callable=_generate_data,
         op_kwargs=dict(n=EVENTS_PER_DAY, base_time="{{ ds }}"),
     )
-
-    op2 = BranchPythonOperator(
-        task_id="get_bets",
-        python_callable=_total_bets_last_week,
-        op_kwargs=dict(base_time="{{ ds }}"),
-    )
-
-    op3_a = DummyOperator(task_id='internal_external_report')
-    op3_b = DummyOperator(task_id='internal_report')
-
-    op >> op2 >> [op3_a, op3_b]

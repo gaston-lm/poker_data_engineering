@@ -1,11 +1,37 @@
 version: 2
 
 models:
-  - name: report_uif
-    description: "Reperte ante la UIF de jugadores sospechosos"
+  - name: all_in_players
+    description: "Jugadores que hicieron all-in en la última semana."
+    config:
+      tags: ["external", "internal"]
     # columns:
     #   - name: id
     #     description: "The primary key for this table"
     #     data_tests:
     #       - unique
     #       - not_null
+  - name: top_winners
+    description: "Top 20 jugadores de la última semana que más dinero ganaron."
+    config:
+      tags: ["external", "internal"]
+
+  - name: players_behavior
+    description: "Para cada ronda de cada partido calcular la diferencia de lo apostado por cada jugador con respecto a la ronda anterior y indicar si 'se achico' o se 'se agrando'."
+    config:
+      tags: ["internal", "external"]
+
+  - name: uif_report
+    description: "Reporte para la UIF sobre los jugadores sospechosos de lavado de dinero."
+    config:
+      tags: ["external"]
+
+  - name: players_data
+    description: "Datos desnormalizados sobre los jugadores para modelo de machine lerning sobre comportamiento de jugadores relacionado a los movimientos del dólar blue de la semana."
+    config:
+      tags: ["internal"]
+
+  - name: dollar_variation
+    description: "Variación del dolar para modelo de machine lerning sobre comportamiento de jugadores relacionado a los movimientos del dólar blue de la semana."
+    config:
+      tags: ["internal"]

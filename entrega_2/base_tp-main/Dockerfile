@@ -3,6 +3,7 @@ FROM python:3.11-bookworm
 ENV AIRFLOW_HOME=/opt/airflow
 ENV AIRFLOW_VERSION=2.9.1
 WORKDIR /opt/airflow
+RUN pip install requests
 RUN pip install poetry==1.4.2
 COPY pyproject.toml poetry.lock /opt/airflow/
 RUN poetry config virtualenvs.create false && poetry install --no-root

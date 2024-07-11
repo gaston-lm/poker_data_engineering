@@ -1,4 +1,6 @@
 import datetime
+import requests
+import json
 import random
 from faker import Faker
 from faker.providers import address, date_time, internet, passport, phone_number
@@ -6,85 +8,12 @@ import uuid
 
 from td7.custom_types import Records, Record
 
-JUGADORES = [
-    {"id_jugador": 1, "nombre": "Gaston", "apellido": "Loza"},
-    {"id_jugador": 2, "nombre": "Valentin", "apellido": "Bonas"},
-    {"id_jugador": 3, "nombre": "Federico", "apellido": "Giorgi"},
-    {"id_jugador": 4, "nombre": "Tomas", "apellido": "Curzio"},
-    {"id_jugador": 5, "nombre": "Javier", "apellido": "Mermet"},
-    {"id_jugador": 6, "nombre": "Ignacio", "apellido": "Perez"},
-    {"id_jugador": 7, "nombre": "Pablo", "apellido": "Piccoli"},
-    {"id_jugador": 8, "nombre": "Chantal", "apellido": "Levi"},
-    {"id_jugador": 9, "nombre": "Pilar", "apellido": "Solari"},
-    {"id_jugador": 10, "nombre": "Lara", "apellido": "Moglie"},
-    {"id_jugador": 11, "nombre": "Elizabeth", "apellido": "Wurzel"},
-    {"id_jugador": 12, "nombre": "Paula", "apellido": "Kuna"},
-    {"id_jugador": 13, "nombre": "Cecilia", "apellido": "Bari"},
-    {"id_jugador": 14, "nombre": "Emmanuel", "apellido": "Iarussi"},
-    {"id_jugador": 15, "nombre": "Agustin", "apellido": "Gravano"},
-    {"id_jugador": 16, "nombre": "Daniela", "apellido": "Cuesta"}
-]
-
-
 class DataGenerator:
     def __init__(self):
         """Instantiates faker instance"""
         self.fake = Faker()
         self.fake.add_provider(passport)
         self.cards = []
-
-    def generate_cards(self) -> Records:
-        cards = [
-            {"id_carta": 1, "palo": "diamonds", "valor": "A"},
-            {"id_carta": 2, "palo": "hearts", "valor": "A"},
-            {"id_carta": 3, "palo": "spades", "valor": "A"},
-            {"id_carta": 4, "palo": "clubs", "valor": "A"},
-            {"id_carta": 5, "palo": "diamonds", "valor": "K"},
-            {"id_carta": 6, "palo": "hearts", "valor": "K"},
-            {"id_carta": 7, "palo": "spades", "valor": "K"},
-            {"id_carta": 8, "palo": "clubs", "valor": "K"},
-            {"id_carta": 9, "palo": "diamonds", "valor": "Q"},
-            {"id_carta": 10, "palo": "hearts", "valor": "Q"},
-            {"id_carta": 11, "palo": "spades", "valor": "Q"},
-            {"id_carta": 12, "palo": "clubs", "valor": "Q"},
-            {"id_carta": 13, "palo": "diamonds", "valor": "J"},
-            {"id_carta": 14, "palo": "hearts", "valor": "J"},
-            {"id_carta": 15, "palo": "spades", "valor": "J"},
-            {"id_carta": 16, "palo": "clubs", "valor": "J"},
-            {"id_carta": 17, "palo": "diamonds", "valor": "9"},
-            {"id_carta": 18, "palo": "hearts", "valor": "9"},
-            {"id_carta": 19, "palo": "spades", "valor": "9"},
-            {"id_carta": 20, "palo": "clubs", "valor": "9"},
-            {"id_carta": 21, "palo": "diamonds", "valor": "8"},
-            {"id_carta": 22, "palo": "hearts", "valor": "8"},
-            {"id_carta": 23, "palo": "spades", "valor": "8"},
-            {"id_carta": 24, "palo": "clubs", "valor": "8"},
-            {"id_carta": 25, "palo": "diamonds", "valor": "7"},
-            {"id_carta": 26, "palo": "hearts", "valor": "7"},
-            {"id_carta": 27, "palo": "spades", "valor": "7"},
-            {"id_carta": 28, "palo": "clubs", "valor": "7"},
-            {"id_carta": 29, "palo": "diamonds", "valor": "6"},
-            {"id_carta": 30, "palo": "hearts", "valor": "6"},
-            {"id_carta": 31, "palo": "spades", "valor": "6"},
-            {"id_carta": 32, "palo": "clubs", "valor": "6"},
-            {"id_carta": 33, "palo": "diamonds", "valor": "5"},
-            {"id_carta": 34, "palo": "hearts", "valor": "5"},
-            {"id_carta": 35, "palo": "spades", "valor": "5"},
-            {"id_carta": 36, "palo": "clubs", "valor": "5"},
-            {"id_carta": 37, "palo": "diamonds", "valor": "4"},
-            {"id_carta": 38, "palo": "hearts", "valor": "4"},
-            {"id_carta": 39, "palo": "spades", "valor": "4"},
-            {"id_carta": 40, "palo": "clubs", "valor": "4"},
-            {"id_carta": 41, "palo": "diamonds", "valor": "3"},
-            {"id_carta": 42, "palo": "hearts", "valor": "3"},
-            {"id_carta": 43, "palo": "spades", "valor": "3"},
-            {"id_carta": 44, "palo": "clubs", "valor": "3"},
-            {"id_carta": 45, "palo": "diamonds", "valor": "2"},
-            {"id_carta": 46, "palo": "hearts", "valor": "2"},
-            {"id_carta": 47, "palo": "spades", "valor": "2"},
-            {"id_carta": 48, "palo": "clubs", "valor": "2"}
-        ]
-        return cards
 
     def generate_jugadores(self, n: int) -> Records:
         """Generates n jugadores (players).
@@ -120,7 +49,8 @@ class DataGenerator:
 
         """
         self.cards = cards
-
+        print(date)
+        print(type(date))
         partido: Record = {
                     "id_partido": id_prev + 1,
                     "num_jugadores": random.randint(2, 8),
@@ -392,12 +322,27 @@ class DataGenerator:
 
         return jugadores_en_ronda
 
-# Example usage
-# if __name__ == "__main__":
-    # generator = DataGenerator()
+    def load_dollar_blue_data(self, start_date: datetime, end_date: datetime) -> Records:
+        start_date_str = start_date.strftime("%d-%m-%Y")
+        end_date_str = end_date.strftime("%d-%m-%Y")
 
-    # Generate players
-    # jugadores = generator.generate_jugadores(5)
-    # print("Jugadores:", jugadores)
+        url = f"https://mercados.ambito.com//dolar/informal/historico-general/{start_date_str}/{end_date_str}"
 
-    # generator.generate_partido(0)
+        response = requests.get(url)
+        data = json.loads(response.text)
+
+        formatted_data = []
+        for entry in data[1:]:
+            date_str, buying_price_str, selling_price_str = entry
+            date = datetime.datetime.strptime(date_str, '%d/%m/%Y')
+            buying_price = float(buying_price_str.replace(',', '.'))
+            selling_price = float(selling_price_str.replace(',', '.'))
+            print(date)
+            print(type(date))
+            formatted_data.append({
+                "fecha": date.isoformat(),
+                "precio_compra": buying_price,
+                "precio_venta": selling_price
+            })
+
+        return formatted_data

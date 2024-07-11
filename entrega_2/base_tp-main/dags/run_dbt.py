@@ -3,7 +3,8 @@
 import logging
 import pathlib
 import shutil
-from datetime import datetime, timedelta
+import pendulum
+import datetime
 
 from airflow import DAG
 from airflow.configuration import get_airflow_home
@@ -26,9 +27,9 @@ DBT_ROOT_PATH = pathlib.Path(get_airflow_home()) / "dbt_tp"
 DEFAULT_ARGS = {
     "owner": "utdt-td7",
     "depends_on_past": False,
-    "start_date": datetime(2024, 6, 3),
+    "start_date": datetime.datetime(2024, 6, 3),
     "retries": 1,
-    "retry_delay": timedelta(minutes=15),
+    "retry_delay": datetime.timedelta(minutes=15),
 }
 
 
@@ -45,9 +46,9 @@ def copy_docs(project_dir: str):
 
 
 with DAG(
-    "run_dbt",
+    "dbt_external_reporting",
     default_args=DEFAULT_ARGS,
-    schedule=None,  # TODO: complete aquí con lo que considere
+    schedule=None,
     catchup=False,
     max_active_runs=1,
     tags=["dbt"],
@@ -72,7 +73,10 @@ with DAG(
         project_config=project_config,
         execution_config=ExecutionConfig(execution_mode=ExecutionMode.LOCAL),
         render_config=RenderConfig(
-            emit_datasets=False, test_behavior=TestBehavior.AFTER_EACH, dbt_deps=True
+            emit_datasets=False, 
+            test_behavior=TestBehavior.AFTER_EACH, 
+            dbt_deps=True,
+            select=["tag:external"]
         ),
     )
 
@@ -84,3 +88,47 @@ with DAG(
     )
 
     dbt_task_group >> generate_dbt_docs
+
+with DAG(
+    "dbt_internal_use",
+    default_args=DEFAULT_ARGS,
+    schedule=None,
+    catchup=False,
+    max_active_runs=1,
+    tags=["dbt"],
+):
+    project_config = ProjectConfig(
+        dbt_project_path=DBT_ROOT_PATH,
+        project_name=DBT_PROJECT_NAME,
+    )
+
+    profile_config = ProfileConfig(
+        profile_name="dbt_tp",
+        target_name="dev",
+        profile_mapping=PostgresUserPasswordProfileMapping(
+            conn_id=POSTGRES_CONN,
+            profile_args={"dbname": "postgres", "schema": "public"},
+        ),
+    )
+
+    dbt_task_group_internal = DbtTaskGroup(
+        group_id="dbt_task_group_internal",
+        profile_config=profile_config,
+        project_config=project_config,
+        execution_config=ExecutionConfig(execution_mode=ExecutionMode.LOCAL),
+        render_config=RenderConfig(
+            emit_datasets=False, 
+            test_behavior=TestBehavior.AFTER_EACH, 
+            dbt_deps=True,
+            select=["tag:internal"]
+        ),
+    )
+
+    generate_dbt_docs = DbtDocsOperator(
+        task_id="generate_dbt_docs",
+        project_dir=project_config.dbt_project_path,
+        profile_config=profile_config,
+        callback=copy_docs,
+    )
+
+    dbt_task_group_internal >> generate_dbt_docs

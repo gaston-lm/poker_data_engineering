@@ -67,6 +67,12 @@ CREATE TABLE IF NOT EXISTS CartasEnRonda (
     CONSTRAINT unique_cartas_en_mano UNIQUE (id_partido, mano_en_partido, id_carta)
 );
 
+CREATE TABLE IF NOT EXISTS DollarBlue (
+    fecha TIMESTAMP,
+    precio_compra NUMERIC,
+    precio_venta NUMERIC
+);
+
 COPY cartas 
 FROM '/docker-entrypoint-initdb.d/cards.csv'
 DELIMITER ',' 
