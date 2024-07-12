@@ -20,6 +20,8 @@ def _load_dollar_blue_data(base_time: str):
 
 def _total_bets_last_week():
     schema = Schema()
+    print(schema.get_last_week_total_bet()[0]['total_apuesta'])
+    print(type(schema.get_last_week_total_bet()[0]['total_apuesta']))
     total_bet = int(schema.get_last_week_total_bet()[0]['total_apuesta'])
 
     if total_bet > 10:
