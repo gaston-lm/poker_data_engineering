@@ -1,11 +1,19 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
+from airflow.operators.dummy import DummyOperator
 import pendulum
 import datetime
 from td7.data_generator import DataGenerator
 from td7.schema import Schema
 
 EVENTS_PER_DAY = 10
+
+def _is_monday(execution_date, **kwargs):
+    if execution_date.weekday() == 0:  
+        return 'wait_for_financial_data_completion'
+    else:
+        return 'skip_wait'
 
 def _generate_data(base_time: str, n: int):
     """Generates synth data and saves to DB.
@@ -48,8 +56,34 @@ with DAG(
     schedule_interval="@daily",
     catchup=True,
 ) as dag:
-    op = PythonOperator(
+    
+    check_day = BranchPythonOperator(
+        task_id='check_if_monday',
+        python_callable=_is_monday,
+        op_args=['{{ ds }}'],
+        provide_context=True,
+    )
+
+    
+ 
+    wait_for_financial_data_completion = ExternalTaskSensor(
+        task_id="wait_for_financial_data_completion",
+        external_dag_id="financial_data",
+        external_task_id="get_bets_branch", 
+        mode="reschedule",
+        timeout=8000,
+        poke_interval=60,
+        execution_date_fn=lambda exec_date: exec_date-datetime.timedelta(days=1)
+    )
+
+    skip_wait = DummyOperator(
+        task_id='skip_wait',
+    )
+
+    generate_data = PythonOperator(
         task_id="generate_games",
         python_callable=_generate_data,
         op_kwargs=dict(n=EVENTS_PER_DAY, base_time="{{ ds }}"),
     )
+
+    check_day >> [wait_for_financial_data_completion,skip_wait] >> generate_data
