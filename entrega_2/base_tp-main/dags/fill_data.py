@@ -9,7 +9,8 @@ from td7.schema import Schema
 
 EVENTS_PER_DAY = 10
 
-def _is_monday(execution_date, **kwargs):
+def _is_monday(base_time: str):
+    execution_date = datetime.datetime.fromisoformat(base_time)
     if execution_date.weekday() == 0:  
         return 'wait_for_financial_data_completion'
     else:
@@ -60,12 +61,10 @@ with DAG(
     check_day = BranchPythonOperator(
         task_id='check_if_monday',
         python_callable=_is_monday,
-        op_args=['{{ ds }}'],
+        op_args=dict(base_time="{{ ds }}"),
         provide_context=True,
     )
 
-    
- 
     wait_for_financial_data_completion = ExternalTaskSensor(
         task_id="wait_for_financial_data_completion",
         external_dag_id="financial_data",
@@ -73,7 +72,7 @@ with DAG(
         mode="reschedule",
         timeout=8000,
         poke_interval=60,
-        execution_date_fn=lambda exec_date: exec_date-datetime.timedelta(days=1)
+        execution_date_fn=lambda exec_date: exec_date - datetime.timedelta(days=1)
     )
 
     skip_wait = DummyOperator(
