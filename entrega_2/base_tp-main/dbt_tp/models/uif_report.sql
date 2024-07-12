@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 SELECT DISTINCT 
     id_jugador, nombre, apellido
 FROM 

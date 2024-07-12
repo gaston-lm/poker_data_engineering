@@ -1,3 +1,5 @@
+{{ config(materialized='view') }}
+
 WITH diferencias_jugadores AS (
 	SELECT 
 		jr.id_partido, 

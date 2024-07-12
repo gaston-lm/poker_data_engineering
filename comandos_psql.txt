@@ -1,3 +1,3 @@
 docker ps
-docker exec -it b6f2c621c4a9 bash
+docker exec -it 6bb26258bbe0 bash
 psql postgres --username douglas_adams

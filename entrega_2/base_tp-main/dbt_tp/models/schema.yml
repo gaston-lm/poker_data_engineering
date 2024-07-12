@@ -5,33 +5,89 @@ models:
     description: "Jugadores que hicieron all-in en la última semana."
     config:
       tags: ["external", "internal"]
-    # columns:
-    #   - name: id
-    #     description: "The primary key for this table"
-    #     data_tests:
-    #       - unique
-    #       - not_null
+    columns:
+      - name: id_jugador
+        tests:
+          - not_null
+      - name: nombre
+        tests:
+          - not_null
+      - name: apellido
+        tests:
+          - not_null
+      - name: id_partido
+        tests:
+          - not_null
+      - name: mano_en_partido
+        tests:
+          - not_null
+
   - name: top_winners
     description: "Top 20 jugadores de la última semana que más dinero ganaron."
     config:
       tags: ["external", "internal"]
+    columns:
+      - name: id_jugador
+        tests:
+          - not_null
+          - unique
+      - name: nombre
+        tests:
+          - not_null
+      - name: apellido
+        tests:
+          - not_null
 
   - name: players_behavior
     description: "Para cada ronda de cada partido calcular la diferencia de lo apostado por cada jugador con respecto a la ronda anterior y indicar si 'se achico' o se 'se agrando'."
     config:
-      tags: ["internal", "external"]
+      tags: ["external", "internal"]
+    columns:
+      - name: id_jugador
+        tests:
+          - not_null
+      - name: id_partido
+        tests:
+          - not_null
+      - name: mano_en_partido
+        tests:
+          - not_null
+      - name: ronda_en_mano
+        tests:
+          - not_null
+      - name: nombre
+        tests:
+          - not_null
+      - name: apellido
+        tests:
+          - not_null 
+      - name: comportamiento
+        tests:
+          - accepted_values:
+              values: ['primera apuesta', 'se agrandó', 'se achicó']
 
   - name: uif_report
     description: "Reporte para la UIF sobre los jugadores sospechosos de lavado de dinero."
     config:
       tags: ["external"]
+    columns:
+      - name: id_jugador
+        tests:
+          - not_null
+          - unique
+      - name: nombre
+        tests:
+          - not_null
+      - name: apellido
+        tests:
+          - not_null
 
   - name: players_data
     description: "Datos desnormalizados sobre los jugadores para modelo de machine lerning sobre comportamiento de jugadores relacionado a los movimientos del dólar blue de la semana."
     config:
-      tags: ["internal"]
+      tags: ["external", "internal"]
 
   - name: dollar_variation
     description: "Variación del dolar para modelo de machine lerning sobre comportamiento de jugadores relacionado a los movimientos del dólar blue de la semana."
     config:
-      tags: ["internal"]
+      tags: ["external", "internal"]

@@ -44,7 +44,7 @@ def _generate_data(base_time: str, n: int):
 
 with DAG(
     "fill_data",
-    start_date=pendulum.datetime(2024, 6, 1, tz="UTC"),
+    start_date=pendulum.datetime(2024, 6, 24, tz="UTC"),
     schedule_interval="@daily",
     catchup=True,
 ) as dag:

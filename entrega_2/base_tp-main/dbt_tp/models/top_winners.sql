@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='view') }}
 
 WITH total_apostado_por_mano AS (
 	SELECT jr.id_partido, jr.mano_en_partido, sum(jr.apuesta) AS total_apostado

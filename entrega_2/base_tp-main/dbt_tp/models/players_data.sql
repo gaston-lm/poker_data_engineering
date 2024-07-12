@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
 SELECT
     a.id_jugador AS id_jugador_a,
@@ -9,14 +9,15 @@ SELECT
     b.id_jugador AS id_jugador_b,
     b.nombre AS nombre_jugador_b,
     b.apellido AS apellido_jugador_b,
+    b.ronda_en_mano AS ronda_en_mano_b,
+    b.comportamiento AS comportamiento_b,
     t.id_jugador AS id_jugador_t,
     t.nombre AS nombre_jugador_t,
     t.apellido AS apellido_jugador_t,
-    b.*,
-    t.*
+    t.total_ganado
 FROM 
     {{ ref('all_in_players') }} a
 INNER JOIN 
-    {{ ref('players_behavior') }} b ON a.id_jugador = b.id_jugador
+    {{ ref('players_behavior') }} b ON a.id_jugador = b.id_jugador AND a.mano_en_partido = b.mano_en_partido
 INNER JOIN
     {{ ref('top_winners') }} t ON a.id_jugador = t.id_jugador

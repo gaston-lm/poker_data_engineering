@@ -1,5 +1,3 @@
-"""DAG to run our DBT project as a DAG."""
-
 import logging
 import pathlib
 import shutil
@@ -30,6 +28,7 @@ DEFAULT_ARGS = {
     "start_date": datetime.datetime(2024, 6, 3),
     "retries": 1,
     "retry_delay": datetime.timedelta(minutes=15),
+    "timeout": datetime.timedelta(minutes=10),
 }
 
 
@@ -88,47 +87,3 @@ with DAG(
     )
 
     dbt_task_group >> generate_dbt_docs
-
-with DAG(
-    "dbt_internal_use",
-    default_args=DEFAULT_ARGS,
-    schedule=None,
-    catchup=False,
-    max_active_runs=1,
-    tags=["dbt"],
-):
-    project_config = ProjectConfig(
-        dbt_project_path=DBT_ROOT_PATH,
-        project_name=DBT_PROJECT_NAME,
-    )
-
-    profile_config = ProfileConfig(
-        profile_name="dbt_tp",
-        target_name="dev",
-        profile_mapping=PostgresUserPasswordProfileMapping(
-            conn_id=POSTGRES_CONN,
-            profile_args={"dbname": "postgres", "schema": "public"},
-        ),
-    )
-
-    dbt_task_group_internal = DbtTaskGroup(
-        group_id="dbt_task_group_internal",
-        profile_config=profile_config,
-        project_config=project_config,
-        execution_config=ExecutionConfig(execution_mode=ExecutionMode.LOCAL),
-        render_config=RenderConfig(
-            emit_datasets=False, 
-            test_behavior=TestBehavior.AFTER_EACH, 
-            dbt_deps=True,
-            select=["tag:internal"]
-        ),
-    )
-
-    generate_dbt_docs = DbtDocsOperator(
-        task_id="generate_dbt_docs",
-        project_dir=project_config.dbt_project_path,
-        profile_config=profile_config,
-        callback=copy_docs,
-    )
-
-    dbt_task_group_internal >> generate_dbt_docs

@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='view') }}
 
 SELECT DISTINCT 
 	j.id_jugador, j.nombre, j.apellido, jr.id_partido, jr.mano_en_partido
