@@ -24,7 +24,7 @@ def _total_bets_last_week(base_time: str):
     print(schema.get_last_week_total_bet(excec_date)[0]['total_apuesta'])
     total_bet = int(schema.get_last_week_total_bet(excec_date)[0]['total_apuesta'])
 
-    if total_bet > 10:
+    if total_bet > 1500000:
         return 'trigger_internal_external_report'
     else:
         return 'trigger_internal_report'
