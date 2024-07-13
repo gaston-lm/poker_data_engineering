@@ -9,7 +9,7 @@ from td7.schema import Schema
 from airflow.utils.trigger_rule import TriggerRule
 
 
-EVENTS_PER_DAY = 10
+EVENTS_PER_DAY = 50
 
 def _is_monday(base_time: str):
     execution_date = datetime.datetime.fromisoformat(base_time)
