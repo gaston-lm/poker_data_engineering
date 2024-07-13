@@ -18,11 +18,10 @@ def _load_dollar_blue_data(base_time: str):
     schema.insert(last_week_data, "dollarblue")
 
 
-def _total_bets_last_week(base_date: str):
+def _total_bets_last_week(base_time: str):
     schema = Schema()
     excec_date = datetime.datetime.fromisoformat(base_time)
-    print(schema.get_last_week_total_bet(base_date)[0]['total_apuesta'])
-    print(type(schema.get_last_week_total_bet()[0]['total_apuesta']))
+    print(schema.get_last_week_total_bet(excec_date)[0]['total_apuesta'])
     total_bet = int(schema.get_last_week_total_bet(excec_date)[0]['total_apuesta'])
 
     if total_bet > 10:
@@ -38,15 +37,15 @@ with DAG(
     catchup=True,
 ) as dag:
 
-    # wait_for_fill_data_previous_day = ExternalTaskSensor(
-    #     task_id="wait_for_fill_data_previous_day",
-    #     external_dag_id="fill_data",
-    #     external_task_id="generate_data",
-    #     mode="reschedule",
-    #     timeout=8000,
-    #     poke_interval=60,
-    #     execution_date_fn=lambda exec_date: exec_date - datetime.timedelta(days=1)
-    # )
+    wait_for_fill_data_previous_day = ExternalTaskSensor(
+        task_id="wait_for_fill_data_previous_day",
+        external_dag_id="fill_data",
+        external_task_id="generate_data",
+        mode="reschedule",
+        timeout=8000,
+        poke_interval=60,
+        execution_date_fn=lambda exec_date: exec_date - datetime.timedelta(days=1)
+    )
 
     dollar_blue_data = PythonOperator(
         task_id="dollar_blue_data",
@@ -72,7 +71,7 @@ with DAG(
         conf={"message": "only internal"},
     )
     
-    #wait_for_fill_data_previous_day >> dollar_blue_data >> bets_branch >> [trigger_A, trigger_B]
+    wait_for_fill_data_previous_day >> dollar_blue_data >> bets_branch >> [trigger_A, trigger_B]
 
      
-    dollar_blue_data >> bets_branch >> [trigger_A, trigger_B]
+    

@@ -16,7 +16,7 @@ class Schema:
     def get_games_num(self):
         return self.db.run_select("SELECT COUNT(*) FROM Partidos")
 
-    def get_last_week_total_bet(self):
+    def get_last_week_total_bet(self,base_date):
         query = f"""
                 WITH LastWeekPartidos AS (
                     SELECT id_partido
@@ -31,8 +31,9 @@ class Schema:
                 JOIN LastWeekPartidos p ON je.id_partido = p.id_partido;
                 """
                 
-    suma = self.db.run_select(query)
-    print(suma)
+        suma = self.db.run_select(query)
+        print(suma)
+        return suma
         
     def get_hands(self) -> Records:
         return self.db.run_select("SELECT * FROM Manos")

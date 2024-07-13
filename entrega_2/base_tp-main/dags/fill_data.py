@@ -75,7 +75,7 @@ with DAG(
         mode="reschedule",
         timeout=8000,
         poke_interval=60,
-        execution_date_fn=lambda exec_date: exec_date - datetime.timedelta(days=1)
+        execution_date_fn=lambda exec_date: exec_date
     )
 
     skip_wait = DummyOperator(
