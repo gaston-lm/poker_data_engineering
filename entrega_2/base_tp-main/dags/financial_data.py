@@ -18,11 +18,12 @@ def _load_dollar_blue_data(base_time: str):
     schema.insert(last_week_data, "dollarblue")
 
 
-def _total_bets_last_week():
+def _total_bets_last_week(base_date: str):
     schema = Schema()
-    print(schema.get_last_week_total_bet()[0]['total_apuesta'])
+    excec_date = datetime.datetime.fromisoformat(base_time)
+    print(schema.get_last_week_total_bet(base_date)[0]['total_apuesta'])
     print(type(schema.get_last_week_total_bet()[0]['total_apuesta']))
-    total_bet = int(schema.get_last_week_total_bet()[0]['total_apuesta'])
+    total_bet = int(schema.get_last_week_total_bet(excec_date)[0]['total_apuesta'])
 
     if total_bet > 10:
         return 'trigger_internal_external_report'
