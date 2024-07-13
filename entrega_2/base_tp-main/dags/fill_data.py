@@ -13,7 +13,7 @@ EVENTS_PER_DAY = 10
 
 def _is_monday(base_time: str):
     execution_date = datetime.datetime.fromisoformat(base_time)
-    if execution_date.weekday() == 0:  
+    if execution_date.weekday() == 6:  
         return 'wait_for_financial_data_completion'
     else:
         return 'skip_wait'
@@ -55,9 +55,10 @@ def _generate_data(base_time: str, n: int):
 
 with DAG(
     "fill_data",
-    start_date=pendulum.datetime(2024, 6, 25, tz="UTC"),
+    start_date=pendulum.datetime(2024, 6, 28, tz="UTC"),
     schedule_interval="@daily",
     catchup=True,
+    max_active_runs = 1
 ) as dag:
     
     check_day = BranchPythonOperator(

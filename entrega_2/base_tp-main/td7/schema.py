@@ -23,12 +23,10 @@ class Schema:
                                         WHERE hora_inicio >= NOW() - INTERVAL '7 days'
                                     )
                                     SELECT SUM(je.apuesta) AS total_apuesta
-                                    FROM JugadoresEnRonda je
-                                    JOIN Rondas r ON je.ronda_en_mano = r.ronda_en_mano
-                                        AND je.id_partido = r.id_partido
-                                        AND je.mano_en_partido = r.mano_en_partido
-                                    JOIN LastWeekPartidos p ON je.id_partido = p.id_partido;
+                                    FROM JugadoresEnRonda je JOIN Rondas r ON je.ronda_en_mano = r.ronda_en_mano AND je.id_partido = r.id_partido AND je.mano_en_partido = r.mano_en_partido JOIN LastWeekPartidos p ON je.id_partido = p.id_partido;
                                     """)
+                                    
+        print(suma)
         return suma
         
     def get_hands(self) -> Records:
