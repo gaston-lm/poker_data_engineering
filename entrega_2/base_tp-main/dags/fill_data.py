@@ -51,7 +51,7 @@ def _generate_data(base_time: str, n: int):
         schema.insert(rondas, "rondas")
         schema.insert(cartas_en_ronda, "cartasenronda")
         schema.insert(jugadores_en_ronda, "jugadoresenronda")
-        num_partidos += 1 # --> preguntar esto
+        num_partidos += 1
 
 with DAG(
     "fill_data",

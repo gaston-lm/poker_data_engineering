@@ -33,7 +33,7 @@ En este trabajo, nuestra idea es ponernos en los zapatos de una empresa de una d
 - Partidos: 50 por día. Pues consideramos que es un número razonable para nuestra flujo de partidas diarias.
     - Manos: 1 a 5 por partido.
     - Rondas: 1 a 10 por mano.
-Datos del dólar blue: 5 registros por semana (se cuenta con información de los días hábiles).
+- Datos del dólar blue: 5 registros por semana (se cuenta con información de los días hábiles).
 
 #### Linaje de los datos
 
@@ -43,7 +43,7 @@ El DAG `financial_data`, una vez completada la carga de datos del dólar blue de
 
 Para el uso interno, se generarán 3 views que ejecutan distintas queries en SQL. La view `all_in_players` contiene a todos los jugadores que realizaron un all-in en la última semana. La segunda view, `players_behavior`, tiene información sobre el comportamiento de los jugadores para entender si apuestan más en la mano actual que lo que apostaron en la mano anterior.  La última view, `top_winners` tiene los 20 jugadores de la última semana que más dinero ganaron. Estas 3 views luego se unirán en una tabla llamada `players_data`.
 
-Por otro lado, se calculará la variación del dólar en la semana y se guardará en una tabla llamada `dollar_variation`. Luego se utilizará está tabla en conjunto con la tabla de `players_data` servirán como datos de entrenamiento y testeo de un modelo de machine learning del comportamiento de los jugadores del casino online con respecto a los movimientos de la cotización de la moneda extranjera, para que la organización tome decisiones más eficientes sobre estrategias de marketing, entre otras.	
+Por otro lado, se calculará la variación del dólar en la semana y se guardará en una tabla llamada `dollar_variation`. Luego se utilizará está tabla en conjunto con la tabla de `players_data` como datos de entrenamiento y testeo de un modelo de machine learning del comportamiento de los jugadores del casino online con respecto a los movimientos de la cotización de la moneda extranjera, para que la organización tome decisiones más eficientes sobre estrategias de marketing, entre otras.	
 
 Si necesitamos hacer el reporte externo, se realizan las mismas acciones que para el uso interno, más un reporte a la UIF, que se almacena en la tabla `uif_reports` que junta la información de las views `all_in_players` y `top_winners` para informar al ente gubernamental sobre posibles casos de lavado de dinero y movimientos sospechosos de dinero.
 
@@ -59,7 +59,7 @@ La gobernanza de los datos en este tema es algo primordial. Entendemos que el ac
 
 - Generación diaria: Genera y carga datos sintéticos diariamente.
 - Tareas:
-  - `check_day`: Verifica que el día sea lunes. En caso de serlo, debemos esperar a que se termine el run del DAG de financial_data de la semana pasada.
+  - `check_if_monday`: Verifica que el día sea lunes. En caso de serlo, debemos esperar a que se termine el run del DAG de financial_data de la semana pasada.
   - `wait_for_financial_data_completion`: espera hasta que el run de financial_data se haya terminado. Como este DAG sólo permite un run a la vez, no se correrán otros hasta que esta espera termine.
   - `skip_wait`: se ejecutará si el día del run no es lunes.
   - `generate_games`: Genera y carga datos de jugadores, partidos, manos, rondas, etc.
@@ -99,8 +99,12 @@ La gobernanza de los datos en este tema es algo primordial. Entendemos que el ac
   - Crea la tabla del modelo `uif_reports`.
   - Genera la documentación e informes de DBT.
 
-### 3. Flujo de Datos: DAGs
+### 3. Enriquecimiento de datos y tests
 
 El enriquecimiento de los datos se dan en este caso como vimos para generar las tablas necesarias para el modelo de machine learning y el reporte externo ante la UIF.
 
 Estos modelos los testeamos con los test out-of-box como `unique`, `not_null` y `accepted_values`. Por su parte, creamos un test personalizado para verificar que en la view `top_winners` el dinero ganado por los jugadores nunca puede ser menor o igual a 0.
+
+## Repositorio GitHub:
+
+[Link al repositorio](https://github.com/gaston-lm/poker_data_engineering)
