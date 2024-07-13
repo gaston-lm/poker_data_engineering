@@ -6,6 +6,8 @@ import pendulum
 import datetime
 from td7.data_generator import DataGenerator
 from td7.schema import Schema
+from airflow.utils.trigger_rule import TriggerRule
+
 
 EVENTS_PER_DAY = 10
 
@@ -53,7 +55,7 @@ def _generate_data(base_time: str, n: int):
 
 with DAG(
     "fill_data",
-    start_date=pendulum.datetime(2024, 6, 24, tz="UTC"),
+    start_date=pendulum.datetime(2024, 6, 25, tz="UTC"),
     schedule_interval="@daily",
     catchup=True,
 ) as dag:
@@ -61,7 +63,7 @@ with DAG(
     check_day = BranchPythonOperator(
         task_id='check_if_monday',
         python_callable=_is_monday,
-        op_args=dict(base_time="{{ ds }}"),
+        op_kwargs=dict(base_time="{{ ds }}"),
         provide_context=True,
     )
 
@@ -80,9 +82,12 @@ with DAG(
     )
 
     generate_data = PythonOperator(
-        task_id="generate_games",
+        task_id="generate_data",
         python_callable=_generate_data,
         op_kwargs=dict(n=EVENTS_PER_DAY, base_time="{{ ds }}"),
+        trigger_rule = 'one_success'
     )
 
-    check_day >> [wait_for_financial_data_completion,skip_wait] >> generate_data
+    check_day >> [wait_for_financial_data_completion, skip_wait]
+    wait_for_financial_data_completion >> generate_data
+    skip_wait >> generate_data

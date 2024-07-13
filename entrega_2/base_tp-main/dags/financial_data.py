@@ -32,7 +32,7 @@ def _total_bets_last_week():
 
 with DAG(
     "financial_data",
-    start_date=pendulum.datetime(2024, 6, 25, tz="UTC"),
+    start_date=pendulum.datetime(2024, 6, 30, tz="UTC"),
     schedule_interval="@weekly",
     catchup=True,
 ) as dag:
